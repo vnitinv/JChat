@@ -7,12 +7,3 @@ class ConnectedDevice(object):
             cls._instance = super(ConnectedDevice, cls).__new__(
                                 cls, *args, **kwargs)
         return cls._instance
-    #
-    # def __init__(self):
-    #     print 'construction'
-    #     self.devices = []
-    #     self.groups = {}
-    #
-    # @property
-    # def connections(self):
-    #     return self.devices

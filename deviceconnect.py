@@ -130,15 +130,3 @@ class Ui_DeviceConnect(object):
         self.label_4.setText(_translate("DeviceConnect", "Add to group:", None))
         self.lineEdit_2.setPlaceholderText(_translate("DeviceConnect", "Optional", None))
 
-
-# if __name__ == "__main__":
-#     import sys
-#     app = QtGui.QApplication(sys.argv)
-#     DeviceConnect = QtGui.QMainWindow()
-#     ui = Ui_DeviceConnect()
-#     ui.setupUi(DeviceConnect)
-#     DeviceConnect.show()
-#     sys.exit(app.exec_())
-
-
-
