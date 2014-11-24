@@ -98,8 +98,8 @@ class Ui_DeviceConnect(object):
         DeviceConnect.setStatusBar(self.statusBar)
 
         self.retranslateUi(DeviceConnect)
-        QtCore.QObject.connect(self.lineEdit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.clicked)
-        QtCore.QObject.connect(self.lineEdit_2, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.pushButton.clicked)
+        QtCore.QObject.connect(self.lineEdit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.connectServer)
+        QtCore.QObject.connect(self.lineEdit_2, QtCore.SIGNAL(_fromUtf8("returnPressed()")), self.connectServer)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.connectServer)
         QtCore.QMetaObject.connectSlotsByName(DeviceConnect)
 
@@ -129,4 +129,9 @@ class Ui_DeviceConnect(object):
         self.label_3.setText(_translate("DeviceConnect", "Nick Name:", None))
         self.label_4.setText(_translate("DeviceConnect", "Add to group:", None))
         self.lineEdit_2.setPlaceholderText(_translate("DeviceConnect", "Optional", None))
+        keys = self.cd_login.groups.keys()
+        for k in keys:
+            self.comboBox.setItemText(keys.index(k), _translate("DeviceConnect", k, None))
+
+
 

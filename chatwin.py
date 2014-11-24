@@ -38,6 +38,7 @@ class Ui_JChatMain(object):
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.textBrowser = QtGui.QTextBrowser(self.centralWidget)
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
+        self.textBrowser.setAcceptRichText(False)
         self.gridLayout.addWidget(self.textBrowser, 0, 0, 1, 2)
         self.comboBox = QtGui.QComboBox(self.centralWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
@@ -67,7 +68,7 @@ class Ui_JChatMain(object):
         QtCore.QMetaObject.connectSlotsByName(JChatMain)
 
     def retranslateUi(self, JChatMain):
-        JChatMain.setWindowTitle(_translate("JChatMain", "Chat Window", None))
+        JChatMain.setWindowTitle(_translate("JChatMain", self.cd_chat.devices[0][1]._hostname, None))
         self.comboBox.setItemText(0, _translate("JChatMain", "cli", None))
         self.comboBox.setItemText(1, _translate("JChatMain", "rpc", None))
         self.lineEdit.setPlaceholderText(_translate("JChatMain", "Type an expression and press Enter", None))
@@ -80,8 +81,9 @@ class Ui_JChatMain(object):
         elif command == "rpc":  # disconnects from current connection
             output = etree.tostring(getattr(self.cd_chat.devices[0][1].rpc, str(input).replace('-','_'))())
         try:
-            self.textBrowser.append("<b>\n%s: %s\n</b>" % (command, input))
-            self.textBrowser.append("<b>%s</b>:\n%s\n" % (self.cd_chat.devices[0][0], output))
+            #self.textBrowser.append("%s: %s\n" % (command, input))
+            self.textBrowser.setPlainText("\n%s: %s\n\n%s: %s\n" % (command, input, self.cd_chat.devices[0][0], output))
+            #self.textBrowser.append("<b>%s</b>: %s" % (self.cd_chat.devices[0][0], output))
         except:
             self.textBrowser.append(
             "<font color=red>%s is invalid!</font>" % input)

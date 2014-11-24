@@ -17,6 +17,7 @@ except AttributeError:
 
 import chatwin
 import deviceconnect
+import creategroup
 from boxes import ConnectedDevice
 
 try:
@@ -62,11 +63,14 @@ class Ui_MainChatWindow(object):
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionEdit = QtGui.QAction(MainChatWindow)
         self.actionEdit.setObjectName(_fromUtf8("actionEdit"))
+        self.actionCreate = QtGui.QAction(MainChatWindow)
+        self.actionCreate.setObjectName(_fromUtf8("actionCreate"))
         self.actionOnline = QtGui.QAction(MainChatWindow)
         self.actionOnline.setObjectName(_fromUtf8("actionOnline"))
         self.menuDevice.addAction(self.actionConnect)
         self.menuDevice.addAction(self.actionExit)
         self.menuGroup.addAction(self.actionEdit)
+        self.menuGroup.addAction(self.actionCreate)
         self.menuView.addAction(self.actionOnline)
         self.menuBar.addAction(self.menuDevice.menuAction())
         self.menuBar.addAction(self.menuGroup.menuAction())
@@ -74,6 +78,7 @@ class Ui_MainChatWindow(object):
 
         self.retranslateUi(MainChatWindow)
         QtCore.QObject.connect(self.actionConnect, QtCore.SIGNAL(_fromUtf8("triggered()")), self.openDeviceConnect)
+        QtCore.QObject.connect(self.actionCreate, QtCore.SIGNAL(_fromUtf8("triggered()")), self.openCreateGroup)
         QtCore.QObject.connect(self.treeView, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), self.openChatWindow)
         QtCore.QMetaObject.connectSlotsByName(MainChatWindow)
 
@@ -85,6 +90,7 @@ class Ui_MainChatWindow(object):
         self.actionConnect.setText(_translate("MainChatWindow", "Connect", None))
         self.actionExit.setText(_translate("MainChatWindow", "Exit", None))
         self.actionEdit.setText(_translate("MainChatWindow", "Edit", None))
+        self.actionCreate.setText(_translate("MainChatWindow", "Create", None))
         self.actionOnline.setText(_translate("MainChatWindow", "Online", None))
 
 
@@ -94,6 +100,12 @@ class Ui_MainChatWindow(object):
         self.connect_ui.setupUi(self.DeviceConnect)
         self.DeviceConnect.show()
         self.DeviceConnect.closeEvent = self.updateTree
+
+    def openCreateGroup(self):
+        self.CreateGroup = QtGui.QWidget()
+        self.cg_ui = creategroup.Ui_CreateGroup()
+        self.cg_ui.setupUi(self.CreateGroup)
+        self.CreateGroup.show()
 
     def updateTree(self, event=None):
         self.model = QtGui.QStandardItemModel()
