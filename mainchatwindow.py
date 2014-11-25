@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'mainchatwindow.ui'
-#
-# Created: Sun Nov 23 14:13:46 2014
-#      by: PyQt4 UI code generator 4.11.3
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -83,7 +74,7 @@ class Ui_MainChatWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainChatWindow)
 
     def retranslateUi(self, MainChatWindow):
-        MainChatWindow.setWindowTitle(_translate("MainChatWindow", "MainChatWindow", None))
+        MainChatWindow.setWindowTitle(_translate("MainChatWindow", "JChat", None))
         self.menuDevice.setTitle(_translate("MainChatWindow", "Device", None))
         self.menuGroup.setTitle(_translate("MainChatWindow", "Group", None))
         self.menuView.setTitle(_translate("MainChatWindow", "View", None))
@@ -109,16 +100,17 @@ class Ui_MainChatWindow(object):
 
     def updateTree(self, event=None):
         self.model = QtGui.QStandardItemModel()
-        for device in self.cd_maincw.devices:
-            item = QtGui.QStandardItem(device[0])
-            self.model.appendRow(item)
+        self.model.invisibleRootItem()
+        for grp, devices in self.cd_maincw.groups.items():
+            rt = QtGui.QStandardItem(grp)
+            self.model.appendRow(rt)
+            for device in devices:
+                dv = QtGui.QStandardItem(device)
+                rt.appendRow(dv)
         self.treeView.setModel(self.model)
+        self.treeView.expandAll()
 
     def openChatWindow(self, index):
-        # for i in dir(index):
-        #     if not i.startswith('_'):
-        #         print i
-        #         print eval('index.'+str(i)+'()')
         self.JChatMain = QtGui.QMainWindow()
         self.chat_ui = chatwin.Ui_JChatMain()
         self.chat_ui.setupUi(self.JChatMain, index)

@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'jchatmain.ui'
-#
-# Created: Sun Nov 23 13:15:17 2014
-#      by: PyQt4 UI code generator 4.11.3
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt4 import QtCore, QtGui
 from lxml import etree
 
@@ -68,7 +59,7 @@ class Ui_JChatMain(object):
         QtCore.QMetaObject.connectSlotsByName(JChatMain)
 
     def retranslateUi(self, JChatMain):
-        JChatMain.setWindowTitle(_translate("JChatMain", self.cd_chat.devices[0][1]._hostname, None))
+        JChatMain.setWindowTitle(_translate("JChatMain", self.cd_chat.devices[0][0], None))
         self.comboBox.setItemText(0, _translate("JChatMain", "cli", None))
         self.comboBox.setItemText(1, _translate("JChatMain", "rpc", None))
         self.lineEdit.setPlaceholderText(_translate("JChatMain", "Type an expression and press Enter", None))
