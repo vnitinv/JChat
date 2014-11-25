@@ -52,20 +52,10 @@ class Ui_CreateGroup(object):
     def updateGroups(self):
         host = str(self.group_name_lineEdit.text())
         if host not in self.cd_cg.groups:
-            self.cd_cg.groups[host] = ()
+            self.cd_cg.groups[host] = []
 
     def retranslateUi(self, CreateGroup):
         CreateGroup.setWindowTitle(_translate("CreateGroup", "Group", None))
         self.grou_name_label.setText(_translate("CreateGroup", "Group Name:", None))
         self.cg_pushButton.setText(_translate("CreateGroup", "Create", None))
-
-#
-# if __name__ == "__main__":
-#     import sys
-#     app = QtGui.QApplication(sys.argv)
-#     CreateGroup = QtGui.QWidget()
-#     ui = Ui_CreateGroup()
-#     ui.setupUi(CreateGroup)
-#     CreateGroup.show()
-#     sys.exit(app.exec_())
 

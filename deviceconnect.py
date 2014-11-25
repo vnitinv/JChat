@@ -104,19 +104,24 @@ class Ui_DeviceConnect(object):
         QtCore.QMetaObject.connectSlotsByName(DeviceConnect)
 
     def connectServer(self):
-        host = self.lineEdit_3.text()
-        nickname = self.lineEdit_2.text()
-        user = self.lineEdit_4.text()
-        passwd = self.lineEdit.text()
+        host = str(self.lineEdit_3.text())
+        nickname = str(self.lineEdit_2.text())
+        user = str(self.lineEdit_4.text())
+        passwd = str(self.lineEdit.text())
+        currentGroup = str(self.comboBox.currentText())
+        saveDetail = int(self.checkBox.checkState())
 
-        dev = Device(host = str(host),
-                     user = str(user),
-                     passwd = str(passwd))
+        dev = Device(host = host,
+                     user = user,
+                     passwd = passwd)
         dev.open()
-        if nickname =='':
-            self.cd_login.devices.append((dev._hostname,dev))
-        else:
-            self.cd_login.devices.append((str(nickname),dev))
+        if saveDetail !=0:
+            if nickname =='':
+                self.cd_login.devices.append((dev._hostname, dev, (host, user, passwd, currentGroup)))
+            else:
+                self.cd_login.devices.append((nickname, dev, (host, user, passwd, currentGroup)))
+        if currentGroup != '':
+            self.cd_login.groups[currentGroup].append(nickname or dev._hostname)
         print dev
 
     def retranslateUi(self, DeviceConnect):
@@ -129,9 +134,8 @@ class Ui_DeviceConnect(object):
         self.label_3.setText(_translate("DeviceConnect", "Nick Name:", None))
         self.label_4.setText(_translate("DeviceConnect", "Add to group:", None))
         self.lineEdit_2.setPlaceholderText(_translate("DeviceConnect", "Optional", None))
-        keys = self.cd_login.groups.keys()
-        for k in keys:
-            self.comboBox.setItemText(keys.index(k), _translate("DeviceConnect", k, None))
-
+        keys = [_translate("DeviceConnect", '', None)] +\
+               [_translate("DeviceConnect", k, None) for k in self.cd_login.groups.keys()]
+        self.comboBox.addItems(keys)
 
 
