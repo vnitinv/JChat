@@ -108,9 +108,9 @@ class Ui_DeviceConnect(object):
         dev.open()
         if saveDetail !=0:
             if nickname =='':
-                self.cd_login.devices.append((dev._hostname, dev, (host, user, passwd, currentGroup)))
+                self.cd_login.devices[dev._hostname] = (dev, (host, user, passwd, currentGroup))
             else:
-                self.cd_login.devices.append((nickname, dev, (host, user, passwd, currentGroup)))
+                self.cd_login.devices[nickname] = (dev, (host, user, passwd, currentGroup))
         if currentGroup != '':
             self.cd_login.groups[currentGroup].append(nickname or dev._hostname)
         print dev

@@ -19,8 +19,9 @@ except AttributeError:
 
 class Ui_JChatMain(object):
     def setupUi(self, JChatMain, index):
-        self.chat_index = index
+        self.treeViewIndex = index
         self.cd_chat = ConnectedDevice()
+        self.clickedItemDetail()
         JChatMain.setObjectName(_fromUtf8("JChatMain"))
         JChatMain.resize(414, 397)
         self.centralWidget = QtGui.QWidget(JChatMain)
@@ -59,7 +60,7 @@ class Ui_JChatMain(object):
         QtCore.QMetaObject.connectSlotsByName(JChatMain)
 
     def retranslateUi(self, JChatMain):
-        JChatMain.setWindowTitle(_translate("JChatMain", self.cd_chat.devices[0][0], None))
+        JChatMain.setWindowTitle(_translate("JChatMain", self.chat_title, None))
         self.comboBox.setItemText(0, _translate("JChatMain", "cli", None))
         self.comboBox.setItemText(1, _translate("JChatMain", "rpc", None))
         self.lineEdit.setPlaceholderText(_translate("JChatMain", "Type an expression and press Enter", None))
@@ -67,16 +68,28 @@ class Ui_JChatMain(object):
     def updateUi(self):
         command = self.comboBox.currentText()
         input = unicode(self.lineEdit.text())
-        if command == "cli":  # disconnects from current connection
-            output = self.cd_chat.devices[0][1].cli(input, format='text')
-        elif command == "rpc":  # disconnects from current connection
-            output = etree.tostring(getattr(self.cd_chat.devices[0][1].rpc, str(input).replace('-','_'))())
+        if command == "cli":
+            #output = self.cd_chat.devices[0][1].cli(input, format='text')
+            output = self.cd_chat.devices[self.dev_in_action][0].cli(input, format='text')
+        elif command == "rpc":
+            output = etree.tostring(getattr(self.cd_chat.devices[self.dev_in_action][0].rpc, str(input).replace('-','_'))())
         try:
             #self.textBrowser.append("%s: %s\n" % (command, input))
-            self.textBrowser.setPlainText("\n%s: %s\n\n%s: %s\n" % (command, input, self.cd_chat.devices[0][0], output))
+            self.textBrowser.setPlainText("\n%s: %s\n\n%s: %s\n" % (command, input, self.dev_in_action, output))
             #self.textBrowser.append("<b>%s</b>: %s" % (self.cd_chat.devices[0][0], output))
         except:
             self.textBrowser.append(
             "<font color=red>%s is invalid!</font>" % input)
+
+    def clickedItemDetail(self):
+        mdl = self.treeViewIndex.model()
+        if self.treeViewIndex.parent().row() != -1:
+            self.grp_in_action = str(mdl.item(self.treeViewIndex.parent().row()).text())
+            self.dev_in_action = self.chat_title = self.cd_chat.groups[self.grp_in_action][self.treeViewIndex.row()]
+        else:   #group got clicked
+            self.grp_in_action = self.chat_title =  str(mdl.item(self.treeViewIndex.row()).text())
+            if self.grp_in_action not in self.cd_chat.groups:
+                self.dev_in_action = self.grp_in_action
+
 
 

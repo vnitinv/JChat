@@ -1,7 +1,7 @@
 from collections import OrderedDict
 class ConnectedDevice(object):
     _instance = None
-    devices = []
+    devices = {}
     groups = OrderedDict()
     groups['MX']=[]
     groups['SRX']=[]

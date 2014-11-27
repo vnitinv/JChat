@@ -112,9 +112,9 @@ class Ui_MainChatWindow(object):
 
         dev_in_grps = []
         [dev_in_grps.extend(i) for i in self.cd_maincw.groups.values()]
-        for device in self.cd_maincw.devices:
-            if device[0] not in dev_in_grps:
-                dv = QtGui.QStandardItem(device[0])
+        for device in self.cd_maincw.devices.keys():
+            if device not in dev_in_grps:
+                dv = QtGui.QStandardItem(device)
                 dv.setForeground(QtGui.QColor(0,200,0))
                 dv.setFont(QtGui.QFont("Courier", 17))
                 self.model.appendRow(dv)
@@ -123,8 +123,6 @@ class Ui_MainChatWindow(object):
         self.treeView.expandAll()
 
     def openChatWindow(self, index):
-        # print index.parent().row()
-        # print index.row()
         self.JChatMain = QtGui.QMainWindow()
         self.chat_ui = chatwin.Ui_JChatMain()
         self.chat_ui.setupUi(self.JChatMain, index)
