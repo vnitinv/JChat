@@ -16,7 +16,7 @@ except AttributeError:
 
 from boxes import ConnectedDevice
 from jnpr.junos import Device
-from notification import NotificationDevice
+#from notification import NotificationDevice
 
 class Ui_DeviceConnect(object):
     def setupUi(self, DeviceConnect):
@@ -115,8 +115,8 @@ class Ui_DeviceConnect(object):
         if currentGroup != '':
             self.cd_login.groups[currentGroup].append(nickname or dev._hostname)
         print dev
-        dev_notify = NotificationDevice(host)
-        dev_notify.startListening()
+        # dev_notify = NotificationDevice(host)
+        # dev_notify.startListening()
 
 
     def retranslateUi(self, DeviceConnect):

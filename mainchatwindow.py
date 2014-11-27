@@ -1,6 +1,8 @@
 from PyQt4 import QtCore, QtGui
 import os
+import sys
 
+sys.path.append('/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python')
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -89,10 +91,14 @@ class Ui_MainChatWindow(object):
         if os.path.isfile('devices.dat') and os.path.isfile('groups.dat'):
             with open('devices.dat', 'rb') as handle:
                 ConnectedDevice.devices = pickle.load(handle)
+                ConnectedDevice.devices = {k:(None,v) for k,v in ConnectedDevice.devices.items()}
             with open('groups.dat', 'rb') as handle:
                 ConnectedDevice.groups = pickle.load(handle)
+            os.remove('devices.dat')
+            os.remove('groups.dat')
             print ConnectedDevice.groups,ConnectedDevice.devices
-            self.updateTree()
+            self.updateTree(clr = False)
+
 
 
     def openDeviceConnect(self):
@@ -108,7 +114,11 @@ class Ui_MainChatWindow(object):
         self.cg_ui.setupUi(self.CreateGroup)
         self.CreateGroup.show()
 
-    def updateTree(self, event=None):
+    def updateTree(self, event=None, clr=True):
+        if clr ==True:
+            paint = (0, 200, 0)
+        else:
+            paint = (0, 0, 0)
         self.model = QtGui.QStandardItemModel()
         self.model.invisibleRootItem()
         for grp, devices in self.cd_maincw.groups.items():
@@ -116,7 +126,7 @@ class Ui_MainChatWindow(object):
             self.model.appendRow(rt)
             for device in devices:
                 dv = QtGui.QStandardItem(device)
-                dv.setForeground(QtGui.QColor(0,200,0))
+                dv.setForeground(QtGui.QColor(*paint))
                 dv.setFont(QtGui.QFont("Courier", 17))
                 rt.appendRow(dv)
 
@@ -125,7 +135,7 @@ class Ui_MainChatWindow(object):
         for device in self.cd_maincw.devices.keys():
             if device not in dev_in_grps:
                 dv = QtGui.QStandardItem(device)
-                dv.setForeground(QtGui.QColor(0,200,0))
+                dv.setForeground(QtGui.QColor(*paint))
                 dv.setFont(QtGui.QFont("Courier", 17))
                 self.model.appendRow(dv)
 
@@ -139,13 +149,10 @@ class Ui_MainChatWindow(object):
         self.JChatMain.show()
 
     def dumpContact(self,event=None):
-        print ConnectedDevice.devices
         data = {k:v[1] for k,v in zip(ConnectedDevice.devices.keys(), ConnectedDevice.devices.values())}
         print data
         with open('devices.dat', 'wb') as handle:
             pickle.dump(data, handle)
         with open('groups.dat', 'wb') as handle:
             pickle.dump(ConnectedDevice.groups, handle)
-
-
 
