@@ -1,4 +1,5 @@
 from PyQt4 import QtCore, QtGui
+import os
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -9,6 +10,7 @@ except AttributeError:
 import chatwin
 import deviceconnect
 import creategroup
+import pickle
 from boxes import ConnectedDevice
 
 try:
@@ -72,6 +74,7 @@ class Ui_MainChatWindow(object):
         QtCore.QObject.connect(self.actionCreate, QtCore.SIGNAL(_fromUtf8("triggered()")), self.openCreateGroup)
         QtCore.QObject.connect(self.treeView, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), self.openChatWindow)
         QtCore.QMetaObject.connectSlotsByName(MainChatWindow)
+        MainChatWindow.closeEvent = self.dumpContact
 
     def retranslateUi(self, MainChatWindow):
         MainChatWindow.setWindowTitle(_translate("MainChatWindow", "JChat", None))
@@ -83,6 +86,13 @@ class Ui_MainChatWindow(object):
         self.actionEdit.setText(_translate("MainChatWindow", "Edit", None))
         self.actionCreate.setText(_translate("MainChatWindow", "Create", None))
         self.actionOnline.setText(_translate("MainChatWindow", "Online", None))
+        if os.path.isfile('devices.dat') and os.path.isfile('groups.dat'):
+            with open('devices.dat', 'rb') as handle:
+                ConnectedDevice.devices = pickle.load(handle)
+            with open('groups.dat', 'rb') as handle:
+                ConnectedDevice.groups = pickle.load(handle)
+            print ConnectedDevice.groups,ConnectedDevice.devices
+            self.updateTree()
 
 
     def openDeviceConnect(self):
@@ -127,4 +137,15 @@ class Ui_MainChatWindow(object):
         self.chat_ui = chatwin.Ui_JChatMain()
         self.chat_ui.setupUi(self.JChatMain, index)
         self.JChatMain.show()
+
+    def dumpContact(self,event=None):
+        print ConnectedDevice.devices
+        data = {k:v[1] for k,v in zip(ConnectedDevice.devices.keys(), ConnectedDevice.devices.values())}
+        print data
+        with open('devices.dat', 'wb') as handle:
+            pickle.dump(data, handle)
+        with open('groups.dat', 'wb') as handle:
+            pickle.dump(ConnectedDevice.groups, handle)
+
+
 
