@@ -113,6 +113,7 @@ class Ui_MainChatWindow(object):
         self.cg_ui = creategroup.Ui_CreateGroup()
         self.cg_ui.setupUi(self.CreateGroup)
         self.CreateGroup.show()
+        self.CreateGroup.closeEvent = self.updateTree
 
     def updateTree(self, event=None, clr=True):
         if clr ==True:
