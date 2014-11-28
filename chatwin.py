@@ -1,5 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from lxml import etree
+import re
 
 from boxes import ConnectedDevice
 
@@ -68,11 +69,20 @@ class Ui_JChatMain(object):
     def updateUi(self):
         command = self.comboBox.currentText()
         input = unicode(self.lineEdit.text())
+        kwargs = {}
+        if command == "rpc" and '=' in input:
+            obj = re.search(r'(\w+(-\w+)*)=(\w+)',input)
+            if obj:
+                key=obj.group(1)
+                value=obj.group(3)
+                kwargs[key]= True if value=='True' else value
+            input = input.split(' ')[0]
         if not self.group_clicked:
             if command == "cli":
                 output = self.cd_chat.devices[self.dev_in_action][0].cli(input, format='text')
             elif command == "rpc":
-                output = etree.tostring(getattr(self.cd_chat.devices[self.dev_in_action][0].rpc, str(input).replace('-','_'))())
+                print kwargs
+                output = etree.tostring(getattr(self.cd_chat.devices[self.dev_in_action][0].rpc, str(input).replace('-','_'))(**kwargs))
             try:
                 self.textBrowser.setPlainText("\n%s: %s\n\n%s: %s\n" % (command, input, self.dev_in_action, output))
             except:
@@ -87,7 +97,7 @@ class Ui_JChatMain(object):
             elif command == "rpc":
                 output = ''
                 for dev in self.cd_chat.groups[self.grp_in_action]:
-                    op = etree.tostring(getattr(self.cd_chat.devices[dev][0].rpc, str(input).replace('-','_'))())
+                    op = etree.tostring(getattr(self.cd_chat.devices[dev][0].rpc, str(input).replace('-','_'))(**kwargs))
                     output += "\n%s: %s\n\n%s: %s\n" % (command, input, dev, op)
             try:
                 self.textBrowser.setPlainText(output)
